@@ -48,7 +48,7 @@ export class AgregarComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private snackbar: MatSnackBar,
-    private dialog:MatDialog) { }
+    private dialog: MatDialog) { }
 
   ngOnInit(): void {
 
@@ -85,14 +85,23 @@ export class AgregarComponent implements OnInit {
   }
 
   borrarHeroe() {
-    this.dialog.open(ConfirmarComponent,{
-      width:'250px'
+    const dialog = this.dialog.open(ConfirmarComponent, {
+      width: '250px',
+      data: this.heroe
     });
-    // this.heroesService.borrarHeroe(this.heroe.id!)
-    //   .subscribe(resp => {
-    //     this.router.navigate(['/heroes'])
-    //   }
-    //   );
+
+    dialog.afterClosed().subscribe(
+      (result) => {
+        if (result) {
+          this.heroesService.borrarHeroe(this.heroe.id!)
+            .subscribe(resp => {
+              this.router.navigate(['/heroes'])
+            }
+            );
+        }
+      }
+    );
+
   }
 
   mostrarSnackBar(mensaje: string) {
